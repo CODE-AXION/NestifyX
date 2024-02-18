@@ -1,0 +1,30 @@
+{
+    "name": "codeaxion/nestifyx",
+    "description": "The NestifyX package provides functionality for managing categories or nested elements within your application.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CODE-AXION",
+            "email": "codeaxion77@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CodeAxion\\NestifyX\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {},
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CodeAxion\\NestifyX\\NestifyXServiceProvider"
+            ]
+        }
+    }
+}
