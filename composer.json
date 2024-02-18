@@ -24,7 +24,10 @@
         "laravel": {
             "providers": [
                 "CodeAxion\\NestifyX\\NestifyXServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "NestifyX": "CodeAxion\\NestifyX\\NestifyXFacade"
+            }
         }
     }
-}
+} 
