@@ -35,11 +35,6 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-tree" viewBox="0 0 16 16">
                                                         <path d="M8.416.223a.5.5 0 0 0-.832 0l-3 4.5A.5.5 0 0 0 5 5.5h.098L3.076 8.735A.5.5 0 0 0 3.5 9.5h.191l-1.638 3.276a.5.5 0 0 0 .447.724H7V16h2v-2.5h4.5a.5.5 0 0 0 .447-.724L12.31 9.5h.191a.5.5 0 0 0 .424-.765L10.902 5.5H11a.5.5 0 0 0 .416-.777zM6.437 4.758A.5.5 0 0 0 6 4.5h-.066L8 1.401 10.066 4.5H10a.5.5 0 0 0-.424.765L11.598 8.5H11.5a.5.5 0 0 0-.447.724L12.69 12.5H3.309l1.638-3.276A.5.5 0 0 0 4.5 8.5h-.098l2.022-3.235a.5.5 0 0 0 .013-.507"/>
                                                       </svg>
-                                                    {{-- <a href="#"
-                                                      @click="collapseAll()"  class="btn collapse-all">Collapse All</a>
-                                                    |
-                                                    <a href="#"
-                                                    @click="expandAll()"  class="btn expand-all">Expand All </a> --}}
                                                 </div>
                                             </h2>
                                             <div class="flex items-center h-auto ml-3">
@@ -185,7 +180,6 @@
                     let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                     function updateCategoryTree(data,tree) {
-                        // this.loading(data.node, true);
 
                         $.ajax({
                             type: 'PUT',
@@ -195,14 +189,10 @@
                                 category_tree: getCategoryTree(tree) 
                             },
                             success: (message) => {
-                                // success(message);
-
-                                // this.loading(data.node, false);
+                  
                             },
                             error: (xhr) => {
-                                // error(xhr.responseJSON.message);
-
-                                // this.loading(data.node, false);
+                                alert(xhr.responseJSON.message);
                             },
                         });
                     }
@@ -237,10 +227,7 @@
                         $.jstree.defaults.dnd.copy = false;
                        
 
-
                         let tree = $('.category-tree');
-
-                     
 
 
                         tree.jstree({
@@ -266,11 +253,6 @@
                         });
 
 
-                        // tree.on('select_node.jstree', (e, node) => fetchCategory(node.selected[0]));
-
-                        // Expand categories when jstree is loaded.
-                        // tree.on('loaded.jstree', () => tree.jstree('open_all'));
-
                         tree.on('rename_node.jstree', function (e, data) {
                             console.log(data)
                             $.ajax({
@@ -282,15 +264,12 @@
                                     category_tree: getCategoryTree(tree) 
                                 },
                                 success: (message) => {
-                                    // success(message);
                                 
                                     updateCategoryTree(data,tree)
-                                    // this.loading(data.node, false);
                                 },
                                 error: (xhr) => {
-                                    // error(xhr.responseJSON.message);
                                     data.instance.refresh();
-                                    // this.loading(data.node, false);
+                                    alert(xhr.responseJSON.message);
                                 },
                             });
                         })
@@ -304,18 +283,13 @@
                                 
                                 },
                                 success: (d) => {
-                                    // success(message);
-                                    console.log(d);
+                                  
                                     data.instance.set_id(data.node, d.id);
-                                    // data.instance.set_id(data.node, d.id);
-                                    // loading(data.node, false,tree);
-                                    // this.loading(data.node, false);
+                                    
                                 },
                                 error: (xhr) => {
-                                    // error(xhr.responseJSON.message);
                                     data.instance.refresh();
-                                    // loading(data.node, false,tree);
-                                    // this.loading(data.node, false);
+                                    alert(xhr.responseJSON.message);
                                 },
                             });
                         
@@ -331,43 +305,17 @@
                                 
                                 },
                                 success: (message) => {
-                                    // success(message);
-                                    // data.instance.set_id(data.node, d.id);
-                                    // loading(data.node, false,tree);
-                                    // this.loading(data.node, false);
+                                   
                                 },
                                 error: (xhr) => {
-                                    // error(xhr.responseJSON.message);
-                                    // data.instance.refresh();
-                                    console.log(xhr.responseJSON.message)
-                                    // loading(data.node, false,tree);
-                                    // this.loading(data.node, false);
+                        
+                                    alert(xhr.responseJSON.message)
                                 },
                             });
 
                          
                         })
-                    
-                        // tree.on('changed.jstree', function (e, data) {
-                        // 	if(data && data.selected && data.selected.length) {
-
-                        //         let div = document.getElementById(data.node.id)
-                        //         div.addEventListener("contextmenu", (e) => {
-                        //             e.preventDefault()
-                        //             alert(e)
-                        //         });
-
-                        //         console.log(data.node)
-                        // 		// $.get('?operation=get_content&id=' + data.selected.join(':'), function (d) {
-                        // 		// 	$('#data .default').text(d.content).show();
-                        // 		// });
-                        // 	}
-                        // 	else {
-                        // 		$('#data .content').hide();
-                        // 		$('#data .default').text('Select a file from the tree.').show();
-                        // 	}
-                        // });
-
+     
                     }
                     fetchCategoryTree();
                 });
