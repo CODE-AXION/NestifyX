@@ -1,8 +1,8 @@
 
-<h2 align=center> NestifyX Package </h2>
+# NestifyX Package 
 
-<h2 align=center>
-<img align=center src="https://github.com/CODE-AXION/NestifyX/assets/97381867/13f078a2-a179-4b06-8a2b-813a2490fcec" />
+<h2 >
+<img  src="https://github.com/CODE-AXION/NestifyX/assets/97381867/13f078a2-a179-4b06-8a2b-813a2490fcec" />
  </h2>
  
 ## Overview
@@ -10,10 +10,10 @@
 
 The NestifyX package provides functionality for managing categories or nested elements within your application.
 > Organize Your Categories with Ease.
-> 
-<h2 align=center>
-<img align=center src="https://github.com/CODE-AXION/NestifyX/assets/97381867/c8e1f213-9b9f-4e8c-ad23-a88aadc204e8" />
- </h2>
+<br>
+<h2>
+    <img  src="https://github.com/CODE-AXION/NestifyX/assets/97381867/c8e1f213-9b9f-4e8c-ad23-a88aadc204e8" />
+</h2>
 
 ## Features
 1. **Category Tree Management:** This Module includes Category Management with the Ability of changing its position, you just have to include a button component and thats it .
