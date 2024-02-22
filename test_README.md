@@ -20,46 +20,162 @@ To utilize the NestifyX package in your application, follow these steps:
 1. **Installation**: Install the NestifyX package via Composer:
  
  ```bash
-   composer require your-vendor/NestifyX
+   composer require codeaxion/NestifyX
  ```
 2. Integration: Include the Nestify package in your project files by importing it as needed:
 
 
 ```php
-   use YourVendor\Nestify\Nestify;
+   use CodeAxion\NestifyX\NestifyX;
 ```
 
-3. Calculate Depth:
-  ```php
-    $depthInfo = Nestify::calculateDepth($category, $categories);
-    // $depthInfo[0] contains the depth
-    // $depthInfo[1] contains the font-weight class indicating if the category has children
-  ```
-
-4. Build Tree:
+#### Convert Normal Eloquent Collection/Array To Nested Tree
 
   ```php
-    $tree = Nestify::buildTree($flatCategories);
-    // $tree contains the hierarchical tree structure of categories
+   $categories = Category::orderByRaw('-position DESC')->get();
+
+   $nestify = new NestifyX('parent_id','subcategories');
+   $categories = $nestify->nestTree($categories);
   ```
 
-5. Sort structure:
+#### Sort Children without converting it to tree
 
-  ```php
-    $sortedCategories = collect();
-    Nestify::appendCategoryAndChildren($category, $categories, $sortedCategories);
-    // $sortedCategories now contains the sorted collection of categories and their children
-  
-  ```
+```php
+   $categories = Category::orderByRaw('-position DESC')->get();
+
+   $nestify = new NestifyX('parent_id','subcategories');
+   $categories = $nestify->setIndent('|--')->sortChildren($categories);
+
+   // In views
+
+   @foreach($categories as $category)
+    <div> {{$category->depth}} {{$category->name}} </div>
+   @endforeach
+```
+
+#### Sort Children without converting it to tree (flattened version - usefull for dropdowns)
+
+```php
+    $categories = \App\Models\Category::orderByRaw('-position DESC')->get();
+
+    $nestify = new NestifyX('parent_id','subcategories');
+    $categories = $nestify->nestTree($categories);
+    $categories = $nestify->setIndent('|--')->listsFlattened($categories);
+
+  //Result:
+  #items: array:7 [▼
+    4 => "Electronics"
+    5 => "|--Laptops"
+    9 => "|--|--All Laptops"
+    7 => "|--Mobiles"
+    10 => "|--|--All Mobiles"
+    8 => "|--Headphones"
+    11 => "|--|--All Headphones"
+  ]
+```
+
+#### generate breadcrumbs for all categories
+
+```php
+  $categories = \App\Models\Category::orderByRaw('-position DESC')->get();
+
+    $nestify = new NestifyX('parent_id','subcategories');
+    $categories = $nestify->nestTree($categories);
+    $categories = $nestify->setIndent(' \ ')->generateBreadCrumbs($categories);
+
+    //Result:
+    
+    array:7 [▼ // routes\web.php:27
+      4 => "Electronics"
+      5 => "Electronics \ Laptops"
+      9 => "Electronics \ Laptops \ All Laptops"
+      7 => "Electronics \ Mobiles"
+      10 => "Electronics \ Mobiles \ All Mobiles"
+      8 => "Electronics \ Headphones"
+      11 => "Electronics \ Headphones \ All Headphones"
+    ]
+```
 
 
-License
-=======
+#### generate current breadcrumbs 
+```php
 
-Copyright (c) 2024 CODE AXION
+    $categories = Category::get();
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+    $nestify = new NestifyX('parent_id','subcategories');
+   
+    $categories = $nestify->generateCurrentBreadCrumbs($categories,11);
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    array:2 [▼ // routes\web.php:34
+      4 => array:2 [▼
+        "name" => "Electronics"
+        "category" => array:8 [▼
+          "id" => 4
+          "name" => "Electronics"
+          "parent_id" => null
+          "created_at" => "2024-02-18T13:37:52.000000Z"
+          "updated_at" => "2024-02-22T16:40:00.000000Z"
+        ]
+      ]
+      5 => array:2 [▼
+        "name" => "Laptops"
+        "category" => array:8 [▼
+          "id" => 5
+          "name" => "Laptops"
+          "parent_id" => 4
+          "created_at" => "2024-02-18T13:43:26.000000Z"
+          "updated_at" => "2024-02-22T16:40:00.000000Z"
+        ]
+      ]
+    ]
+```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#### Get all parent ids of a child
+```php
+
+    $categories = Category::get();
+
+    $nestify = new NestifyX('parent_id','subcategories');
+   
+    $categories = $nestify->collectParentIds($categories,11);
+
+```
+
+#### Get all child ids of a parent
+```php
+
+    $categories = Category::get();
+
+    $nestify = new NestifyX('parent_id','subcategories');
+   
+    $categories = $nestify->collectChildIds($categories,4);
+
+```
+
+
+
+
+### Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+### Security
+
+If you discover any security related issues, please email codeaxoin77@gmail.com instead of using the issue tracker.
+
+## Credits
+
+-   [code-axion](https://github.com/code-axion)
+-   [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Laravel Package Boilerplate
+
+This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
