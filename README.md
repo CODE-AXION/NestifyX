@@ -1,18 +1,25 @@
 
-# NestifyX Package
+<h2 align=center> NestifyX Package </h2>
 
+<h2 align=center>
+<img align=center src="https://github.com/CODE-AXION/NestifyX/assets/97381867/13f078a2-a179-4b06-8a2b-813a2490fcec" />
+ </h2>
+ 
 ## Overview
 
 
 The NestifyX package provides functionality for managing categories or nested elements within your application.
 > Organize Your Categories with Ease.
+> 
+<h2 align=center>
+<img align=center src="https://github.com/CODE-AXION/NestifyX/assets/97381867/c8e1f213-9b9f-4e8c-ad23-a88aadc204e8" />
+ </h2>
 
 ## Features
-1. **Calculate Depth:** The package includes a method `calculateDepth($category, $categories)` that calculates the depth of a given category within a hierarchical structure.
+1. **Category Tree Management:** This Module includes Category Management with the Ability of changing its position, you just have to include a button component and thats it .
    
-2. **Build Tree:** Another method `buildTree($flatCategories, $parentId = null, $depth = 0)` constructs a hierarchical tree from a normal collection of categories. It arranges categories into a tree structure based on their parent-child relationships, assigning each category a depth level.
+2. **Recursion Methods:** This Module includes various methods to play with recursions, like generating tree, fetch Children/Parent ids, generate breadcrumbs, show tree view in dropdown etc...  
 
-3. **Append Category and Children:** This package offers a method `appendCategoryAndChildren($category, $categories, &$sortedCategories, $depth = 0)` to append a category and its children recursively to a sorted collection. This is particularly useful for creating nested lists or trees without hierarchical structure.
 
 ## Usage
 To utilize the NestifyX package in your application, follow these steps:
@@ -154,6 +161,10 @@ To utilize the NestifyX package in your application, follow these steps:
 
 
 
+### Upcoming Feature
+> Add Nestable2 plugin feature in Categories
+<br>
+New features suggestions are always welcome
 
 ### Changelog
 
@@ -176,6 +187,3 @@ If you discover any security related issues, please email codeaxoin77@gmail.com 
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
