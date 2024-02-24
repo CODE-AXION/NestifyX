@@ -177,7 +177,7 @@
             init(){
                 this.$nextTick(() => {
                    
-                    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    let csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '{{csrf_token()}}';
 
                     function updateCategoryTree(data,tree) {
 
@@ -208,18 +208,6 @@
                                 position: category.data.position,
                             });
                         }, []);
-                    }
-
-                    function loading(node, state,tree) {
-
-                    
-                        let nodeElement = $('.category-tree').jstree(true).get_node(node, true);
-                        console.log(nodeElement)
-                        if (state) {
-                            $(nodeElement).addClass('jstree-loading');
-                        } else {
-                            $(nodeElement).removeClass('jstree-loading');
-                        }
                     }
 
                     function fetchCategoryTree() {
@@ -254,7 +242,6 @@
 
 
                         tree.on('rename_node.jstree', function (e, data) {
-                            console.log(data)
                             $.ajax({
                                 type: 'PUT',
                                 url: '{{route('categories.tree.update')}}',

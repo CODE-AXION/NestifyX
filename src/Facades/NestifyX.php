@@ -1,13 +1,13 @@
 <?php
 
-namespace CodeAxion\NestifyX;
+namespace CodeAxion\NestifyX\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \CodeAxion\NestifyX\Skeleton\SkeletonClass
  */
-class NestifyXFacade extends Facade
+class NestifyX extends Facade
 {
     /**
      * Get the registered name of the component.
