@@ -111,7 +111,7 @@ class NestifyX
         foreach ($categories as $category) {
             if ($category[$this->parent_id] === $parentId) { // Access using array access notation
                 $category['depth'] = $depth;
-                $category['subcategories'] = $this->nestTree($categories, $category['id'], $depth + 1);
+                $category[$this->relationName] = $this->nestTree($categories, $category['id'], $depth + 1);
                 $tree[] = $category;
             }
         }
@@ -135,7 +135,7 @@ class NestifyX
     {
         foreach ($collection as $item) {
 
-            if($item['parent_id'] == $parent_id)
+            if($item[$this->parent_id] == $parent_id)
             {
 
                 if ($parentString) {
@@ -186,9 +186,9 @@ class NestifyX
 
                 $breadcrumbs = $this->prependWithKeys($breadcrumbs, $category[$column], $category['id']);
 
-                if (isset($category['parent_id'])) {
+                if (isset($category[$this->parent_id])) {
      
-                    return $this->getParentBreadcrumbs($categories, $category['parent_id'], $column, $breadcrumbs);
+                    return $this->getParentBreadcrumbs($categories, $category[$this->parent_id], $column, $breadcrumbs);
                 }
     
                 return $breadcrumbs;
@@ -276,9 +276,9 @@ class NestifyX
             
                 $breadcrumbs[$category[$key]] = $category[$name]; 
 
-                if (isset($category['parent_id'])) {
+                if (isset($category[$this->parent_id])) {
 
-                    return $this->collectParentIds($categories, $category['parent_id'], $key, $name, $breadcrumbs);
+                    return $this->collectParentIds($categories, $category[$this->parent_id], $key, $name, $breadcrumbs);
                 }
                 
                 return $breadcrumbs;
@@ -291,12 +291,12 @@ class NestifyX
     /**
      * Collect child IDs of a parent category.
      *
-     * @param array  $categories The list of categories.
+     * @param mixed  $categories The list of categories.
      * @param int    $parent_id  The parent ID to start with.
      * 
      * @return array The collected child IDs.
      */
-    public function collectChildIds(array $categories, int $parent_id): array
+    public function collectChildIds(mixed $categories, int $parent_id): array
     {
         $allChildrenIds = [$parent_id];
 
@@ -317,7 +317,7 @@ class NestifyX
     protected function collectChildrenIds(mixed $categories, array &$allChildrenIds, ?int $parent_id = null)
     {
         $children = collect($categories)->filter(function ($item) use ($parent_id) {
-            return $item->parent_id == $parent_id;
+            return $item->{$this->parent_id} == $parent_id;
         });
 
         foreach ($children as $child) {

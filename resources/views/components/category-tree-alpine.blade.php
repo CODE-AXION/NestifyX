@@ -1,5 +1,8 @@
+@props(['title' => 'Category Tree'])
 <div x-data="categoryTree" >
-    <button  type="button"  @click="treeSidebar=true" class="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium transition-colors bg-white border rounded-md hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-200/60 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none">Category Tree</button>
+    <button  type="button"  @click="treeSidebar=true" class="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium transition-colors bg-white border rounded-md hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-200/60 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none">
+        {{$title}}
+    </button>
 
 
     <div class="relative z-50 w-auto h-auto">
@@ -24,7 +27,7 @@
                                 class="w-screen max-w-md">
 
                                 <div
-                                    class="flex flex-col h-full py-5 overflow-y-scroll bg-white   border-l shadow-lg border-neutral-100/70">
+                                    class="flex flex-col h-full py-5 overflow-y-hidden bg-white   border-l shadow-lg border-neutral-100/70">
                                     
                                     <div class="px-4 sm:px-5">
                                         <div class="flex items-start justify-between pb-1">
@@ -54,7 +57,7 @@
                                     <div class="relative flex-1 px-4 mt-5 sm:px-5">
                                         <div class="absolute inset-0 px-4 sm:px-5">
                                             <div
-                                                class="relative h-full overflow-hidden   rounded-md border-neutral-300">
+                                                class="relative h-screen overflow-y-scroll px-3 rounded-md border-neutral-300">
     
                                                 <div class="flex">
 
@@ -68,7 +71,7 @@
                                                         </div>
         
                                                       
-    
+                                                        <div class="category-tree-error" style="color: red; padding-block: 0.2rem"></div>
                                                         <div class="category-tree"></div>
                                                     </div>
 
@@ -217,11 +220,19 @@
 
                         let tree = $('.category-tree');
 
-
+                        
                         tree.jstree({
                             core: {
                                 data: { url: '{{ route('categories.tree')}}' },
-                                check_callback: true
+                                check_callback: true,
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $('.category-tree-error').html("<p>" + jqXHR.reason + "</p>"); 
+                                    setTimeout(function () {
+                                        $('.category-tree-error').html('');
+                                    }, 3000);
+
+                                }
+
                             },
                             
                             plugins: ['dnd','state','search','types'],
