@@ -28,6 +28,13 @@ class NestifyX
     public string $relationName ;
 
     /**
+     * The column name.
+     *
+     * @var string
+     */
+    public string $column = 'name' ;
+
+    /**
      *  constructor.
      *
      * @param string $parent_id    The parent ID column name.
@@ -54,7 +61,8 @@ class NestifyX
 
         foreach ($categories as $category) {
             if ($category[$this->parent_id] === $parent_id) {
-                $category['depth'] = str_repeat($this->indent, $depth);
+                $category['indent'] = str_repeat($this->indent, $depth);
+                $category['depth'] =  $depth;
                 $sortedCategories->push($category);
                 $sortedCategories = $sortedCategories->merge($this->sortChildren($categories,$category['id'],$depth + 1));
             }
@@ -215,8 +223,8 @@ class NestifyX
         foreach ($categories as $category) {
             if ($category[$this->parent_id] === $parentId) {
                 $indentation = str_repeat($this->indent, $depth);
-                $flattened[$category['id']] = $indentation . $category[$columnName];
-                $nestedFlattened = $this->listsFlattened($categories, $category['id'], $columnName, $depth + 1);
+                $flattened[$category['id']] = $indentation . $category[$this->column];
+                $nestedFlattened = $this->listsFlattened($categories, $category['id'], $this->column, $depth + 1);
 
                 foreach ($nestedFlattened as $key => $value) {
                     $flattened[$key] = $value;
@@ -225,6 +233,13 @@ class NestifyX
         }
 
         return collect($flattened);
+    }
+
+    public function setColumn($column): self
+    {
+        $this->column = $column;
+
+        return $this;
     }
 
     /**
@@ -335,7 +350,7 @@ class NestifyX
      * 
      * @return array The generated breadcrumbs.
      */
-    public function generateCurrentBreadCrumbs(mixed $categories, int $targetId, string $column = 'name'): array
+    public function generateCurrentBreadCrumbs(mixed $categories, int $targetId): array
     {
         $breadcrumbs = [];
 
@@ -345,8 +360,8 @@ class NestifyX
 
         foreach ($parentCategories as $category) {
             $breadcrumbs[$category['id']] = [
-                'name' => $category[$column],
-                'category' => $category->toArray(),
+                'name' => $category[$this->column],
+                'entity' => $category->toArray(),
             ];
         }
 

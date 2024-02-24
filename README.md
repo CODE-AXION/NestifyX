@@ -1,9 +1,9 @@
 
 # NestifyX Package 
 
-<h2 >
-<img  src="https://github.com/CODE-AXION/NestifyX/assets/97381867/13f078a2-a179-4b06-8a2b-813a2490fcec" />
- </h2>
+<h2>
+  <img  src="https://github.com/CODE-AXION/NestifyX/assets/97381867/13f078a2-a179-4b06-8a2b-813a2490fcec" />
+</h2>
  
 ## Overview
 
@@ -18,7 +18,9 @@ The NestifyX package provides functionality for managing categories or nested el
 ## Features
 1. **Category Tree Management:** This Module includes Category Management with the Ability of changing its position, you just have to include a button component and thats it .
    
-2. **Recursion Methods:** This Module includes various methods to play with recursions, like generating tree, fetch Children/Parent ids, generate breadcrumbs, show tree view in dropdown etc...  
+2. **Recursion Methods:** This Module includes various methods to play with recursions, like generating tree, fetch Children/Parent ids, generate breadcrumbs, show tree view in dropdown etc... 
+
+3. **Performance:** Will do all your work in a single query 
 
 
 ## Usage
@@ -27,70 +29,121 @@ To utilize the NestifyX package in your application, follow these steps:
 1. **Installation**: Install the NestifyX package via Composer:
  
  ```bash
-   composer require codeaxion/NestifyX
+   composer require codeaxion/nestifyx
  ```
-2. Integration: Include the Nestify package in your project files by importing it as needed:
+2. Integration: Include the Nestify Facade
 
 
 ```php
-   use CodeAxion\NestifyX\NestifyX;
+  use CodeAxion\NestifyX\Facades\NestifyX;
 ```
 
 #### Convert Normal Eloquent Collection/Array To Nested Tree
 
   ```php
+   use CodeAxion\NestifyX\Facades\NestifyX;
+
    $categories = Category::orderByRaw('-position DESC')->get();
 
-   $nestify = new NestifyX('parent_id','subcategories');
-   $categories = $nestify->nestTree($categories);
+   $categories = NestifyX::nestTree($categories);
   ```
 
 #### Sort Children without converting it to tree
 
 ```php
-   $categories = Category::orderByRaw('-position DESC')->get();
+  use CodeAxion\NestifyX\Facades\NestifyX;
 
-   $nestify = new NestifyX('parent_id','subcategories');
-   $categories = $nestify->setIndent('|--')->sortChildren($categories);
+  $categories = Category::orderByRaw('-position DESC')->get(); //Sort by children with it's position (RECOMMENDED after sorting is done by jstree)
+  //OR
+  $categories = Category::get() //Sort by only children;
 
-   // In views
+  //will return original database collection 
+  $categories = NestifyX::setIndent('|--')->sortChildren($categories); //fetch all categories and subcategories
+  //OR
+  $categories = NestifyX::setIndent('|--')->sortChildren($categories,5) //Pass different category id if you want their children of (refer to 2nd example)
 
-   @foreach($categories as $category)
-    <div> {{$category->depth}} {{$category->name}} </div>
-   @endforeach
+  // In view
+  @foreach($categories as $category)
+  <div> {{$category->indent}} {{$category->name}} </div>
+  @endforeach
+
+  //Will result
+  /** 
+  Electronics
+  |-- Mobiles
+  |-- |-- All Mobiles
+  |-- Headphones
+  |-- |-- All Headphones
+  |-- Gaming
+  |-- |-- Gaming Laptops
+  |-- |-- Business Laptops
+  |-- Laptops
+  |-- |-- All Laptops
+  |-- |-- Apple Laptops
+  |-- |-- Microsoft Laptops
+  */
 ```
 
-#### Sort Children without converting it to tree (flattened version - usefull for dropdowns)
+#### Flatten Children (- useful for dropdowns)
+
+```php
+    use CodeAxion\NestifyX\Facades\NestifyX;
+
+    $categories = \App\Models\Category::orderByRaw('-position DESC')->get();
+
+    //fetch all categories and subcategories (CASE 1)
+    $categories = NestifyX::setIndent('|--')->listsFlattened($categories); 
+
+    //OR
+    //pass different category id if you want their children of (CASE 2)
+    $categories = NestifyX::setIndent('|--')->listsFlattened($categories,5);
+    //OR
+    ////if your column name is different (default will be name)
+    $categories = NestifyX::setIndent('|--')->setColumn('title')->listsFlattened($categories); 
+
+    dd($categories);
+
+    //Result (CASE 1):
+    /**
+      #items: array:7 [▼
+        4 => "Electronics"
+        5 => "|--Laptops"
+        9 => "|--|--All Laptops"
+        7 => "|--Mobiles"
+        10 => "|--|--All Mobiles"
+        8 => "|--Headphones"
+        11 => "|--|--All Headphones"
+      ]
+    */
+
+    //Result (CASE 2):
+    /**
+      #items: array:7 [▼
+        5 => "Laptops"
+        9 => "|-- All Laptops"
+      ]
+    */
+
+
+```
+```html
+
+  <!-- In view -->
+ <select class="border-gray-400" name="" id="">
+      @foreach ($categories as $id => $name)
+      <option value="{{$id}}"> {{$name}} </option>
+      @endforeach
+  </select>
+```
+
+#### Generate breadcrumbs for all categories
 
 ```php
     $categories = \App\Models\Category::orderByRaw('-position DESC')->get();
+ 
+    $categories = NestifyX::setIndent(' \ ')->generateBreadCrumbs($categories);
 
-    $nestify = new NestifyX('parent_id','subcategories');
-    $categories = $nestify->nestTree($categories);
-    $categories = $nestify->setIndent('|--')->listsFlattened($categories);
-
-  //Result:
-  #items: array:7 [▼
-    4 => "Electronics"
-    5 => "|--Laptops"
-    9 => "|--|--All Laptops"
-    7 => "|--Mobiles"
-    10 => "|--|--All Mobiles"
-    8 => "|--Headphones"
-    11 => "|--|--All Headphones"
-  ]
-```
-
-#### generate breadcrumbs for all categories
-
-```php
-  $categories = \App\Models\Category::orderByRaw('-position DESC')->get();
-
-    $nestify = new NestifyX('parent_id','subcategories');
-    $categories = $nestify->nestTree($categories);
-    $categories = $nestify->setIndent(' \ ')->generateBreadCrumbs($categories);
-
-    //Result:
+    //will return flattened Result:
     
     array:7 [▼ // routes\web.php:27
       4 => "Electronics"
@@ -104,16 +157,14 @@ To utilize the NestifyX package in your application, follow these steps:
 ```
 
 
-#### generate current breadcrumbs 
+#### Generate current breadcrumbs 
 ```php
 
     $categories = Category::get();
 
-    $nestify = new NestifyX('parent_id','subcategories');
-   
-    $categories = $nestify->generateCurrentBreadCrumbs($categories,11);
+    $categories = NestifyX::generateCurrentBreadCrumbs($categories,5); //2nd param: child id 
 
-    array:2 [▼ // routes\web.php:34
+    array:2 [▼ 
       4 => array:2 [▼
         "name" => "Electronics"
         "category" => array:8 [▼
@@ -137,25 +188,34 @@ To utilize the NestifyX package in your application, follow these steps:
     ]
 ```
 
-#### Get all parent ids of a child
+```html
+//in view
+
+  <div class="flex gap-2">
+      <a href="/"> Home </a> 
+      @foreach ($categories as $category)
+      <a href="{{route('shop-page',$category['category']['id'])}}"> \ {{$category['name']}} </a>
+      @endforeach
+  </div>
+        
+```
+
+
+#### Get all parent ids of a child category
 ```php
 
     $categories = Category::get();
-
-    $nestify = new NestifyX('parent_id','subcategories');
    
-    $categories = $nestify->collectParentIds($categories,11);
+    $categories = NestifyX::collectParentIds($categories,11);
 
 ```
 
-#### Get all child ids of a parent
+#### Get all child ids of a parent category
 ```php
 
     $categories = Category::get();
 
-    $nestify = new NestifyX('parent_id','subcategories');
-   
-    $categories = $nestify->collectChildIds($categories,4);
+    $categories = NestifyX::collectChildIds($categories,4);
 
 ```
 
@@ -180,8 +240,8 @@ If you discover any security related issues, please email codeaxoin77@gmail.com 
 
 ## Credits
 
--   [code-axion](https://github.com/code-axion)
--   [All Contributors](../../contributors)
+-   [Code Axion](https://github.com/code-axion)
+<!-- -   [All Contributors](../../contributors) -->
 
 ## License
 
