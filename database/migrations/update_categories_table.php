@@ -34,6 +34,11 @@ return new class extends Migration
                 if (!Schema::hasColumn($tableName, 'deleted_at')) {
                     $table->softDeletes();
                 } 
+
+                // Check if 'deleted_at' column exists, if not add soft deletes
+                if (!Schema::hasColumn($tableName, 'parent_id')) {
+                    $table->unsignedBigInteger('parent_id')->nullable()->index();
+                } 
             });
         } else {
             // Create the specified table
