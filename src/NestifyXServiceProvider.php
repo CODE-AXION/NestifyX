@@ -20,7 +20,7 @@ class NestifyXServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('nestifyx.php'),
+                __DIR__.'/../config/nestifyx.php' => config_path('nestifyx.php'),
             ], 'config');
 
                $this->publishes([
