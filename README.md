@@ -22,8 +22,10 @@ The NestifyX package provides functionality for managing categories or nested el
 
 3. **Performance:** Will do all your work in a single query 
 
+#### Required Dependencies To Run Js Tree pop up
+>AlpineJs, Jquery, Jstree 
 
-## Usage
+## Installation
 To utilize the NestifyX package in your application, follow these steps:
 
 1. **Installation**: Install the NestifyX package via Composer:
@@ -31,12 +33,62 @@ To utilize the NestifyX package in your application, follow these steps:
  ```bash
    composer require codeaxion/nestifyx
  ```
-2. Integration: Include the Nestify Facade
 
+2. Add Your Required Dependencies via CDN (without these dependencies jstree wont work)
+
+```js
+  //only optional if you have already have alpine js package installed
+  <script src="//unpkg.com/alpinejs" defer></script> 
+
+  //jquery in header
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  //jstree scripts and css (add styles in header and scripts in body)
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+
+
+```
+3. Run necessary Migration 
+> Will add position column in your categories table for ordering
+```php
+  php artisan migrate;
+```
+
+4. Integration: Include the Nestify Facade
 
 ```php
   use CodeAxion\NestifyX\Facades\NestifyX;
 ```
+Thats's it Your setup is over
+
+## Optional 
+
+5. (Optional) Publish config file if you have different table name
+
+```
+php artisan vendor:publish --provider="CodeAxion\NestifyX\NestifyXServiceProvider" --tag="config"
+
+```
+
+6. (Optional) Publish migration if you want
+
+```
+php artisan vendor:publish --provider="CodeAxion\NestifyX\NestifyXServiceProvider" --tag="migrations"
+
+```
+
+
+
+
+## Usage
+
+### Add JsTree Pop up 
+> After adding component click on the button named category tree to open jstree pop up  
+```html
+  <x-nestifyx::category-tree-alpine />
+```
+
 
 #### Convert Normal Eloquent Collection/Array To Nested Tree
 
@@ -234,9 +286,9 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-### Security
+<!-- ### Security
 
-If you discover any security related issues, please email codeaxoin77@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please email codeaxion77@gmail.com instead of using the issue tracker. -->
 
 ## Credits
 
