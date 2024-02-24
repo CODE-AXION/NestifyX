@@ -1,5 +1,5 @@
 
-# NestifyX Package 
+# NestifyX Laravel Package 
 
 <h2>
   <img  src="https://github.com/CODE-AXION/NestifyX/assets/97381867/13f078a2-a179-4b06-8a2b-813a2490fcec" />
@@ -8,7 +8,7 @@
 ## Overview
 
 
-The NestifyX package provides functionality for managing categories or nested elements within your application.
+The NestifyX Laravel package provides features for managing categories and manipulate nested elements within your application using recursive methods.
 > Organize Your Categories with Ease.
 <br>
 <h2>
@@ -16,11 +16,11 @@ The NestifyX package provides functionality for managing categories or nested el
 </h2>
 
 ## Features
-1. **Category Tree Management:** This Module includes Category Management with the Ability of changing its position, you just have to include a button component and thats it .
+1. **Category Tree Management:** This Module includes Category Management with the Ability of changing its position using drag and drop feature, you just have to include a button component and that's it .
    
 2. **Recursion Methods:** This Module includes various methods to play with recursions, like generating tree, fetch Children/Parent ids, generate breadcrumbs, show tree view in dropdown etc... 
 
-3. **Performance:** Will do all your work in a single query 
+3. **Performance:** Will do all your work in a single query.
 
 #### Required Dependencies To Run Js Tree pop up
 >AlpineJs, Jquery, Jstree 
@@ -83,8 +83,8 @@ php artisan vendor:publish --provider="CodeAxion\NestifyX\NestifyXServiceProvide
 
 ## Usage
 
-### Add JsTree Pop up 
-> After adding component click on the button named category tree to open jstree pop up  
+### Add Category Module Slider
+> After adding this blade component click on the button named category tree to open category module slider  
 ```html
   <x-nestifyx::category-tree-alpine />
 ```
@@ -274,7 +274,10 @@ php artisan vendor:publish --provider="CodeAxion\NestifyX\NestifyXServiceProvide
 
 
 ### Upcoming Feature
-> Add Nestable2 plugin feature in Categories
+> - Add Nestable2 plugin feature in Categories <br>
+> - Remove Alpine js dependency
+> - Add support for bootstrap
+
 <br>
 New features suggestions are always welcome
 
