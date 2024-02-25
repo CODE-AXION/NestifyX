@@ -25,6 +25,8 @@ The NestifyX Laravel package provides features for managing categories and manip
 #### Required Dependencies To Run Js Tree pop up
 >AlpineJs, Jquery, Jstree 
 
+<a href="https://youtu.be/XwGvh_4aXvA">Demo Video</a>
+
 ## Installation
 To utilize the NestifyX package in your application, follow these steps:
 
